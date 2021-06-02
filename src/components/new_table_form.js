@@ -26,17 +26,7 @@ function NewTableForm(){
             type: 'CREATE',
             data,
             table
-        })
-        dispatch({
-            type: 'QUERY',
-            params: `SELECT * FROM ${table} LIMIT 100;`,
-        })
-        let csv_uploader = document.querySelectorAll('.csv-input');
-        Array.from(csv_uploader).forEach(csv => {
-            csv.value = ""
-        })
-        let upload_table_name_field = document.querySelector('#upload_table_name')
-        upload_table_name_field.value = "";
+        });
       }
       
     

@@ -50,21 +50,30 @@ const DbProvider = ({ children }) => {
                 // Add a new table
                 if(!Object.keys(currentState.schema).includes(action.table)){
                     let columns = Object.keys(action.data[0])
+                    
                     let table = alasql(`CREATE TABLE IF NOT EXISTS ${action.table} (${columns.join(',')})`);
                     console.log(table)
                     if(table === 1){
                     // For some reason alasql has a hard time with new line characters, remove those!
                     action.data.map((row) => {
                         for(const key in row){
-                        row[key] = row[key].replace(/\n/g, '... ')
+                            if(row[key].includes('\n')){
+                                row[key] = row[key].replace(/\n/g, '... ')
+                            }
                         }
                     })
-                
+                    console.log(action.data)
                     alasql(`INSERT INTO ${action.table} SELECT * FROM  ?`, [action.data]);
                     }
                     else if(table === 0){
                         // alert('Could not create table... It may already exist, please try a new name.')
                     }
+                    let csv_uploader = document.querySelectorAll('.csv-input');
+                    Array.from(csv_uploader).forEach(csv => {
+                        csv.value = ""
+                    })
+                    let upload_table_name_field = document.querySelector('#upload_table_name')
+                    upload_table_name_field.value = "";
                 }
                 updateSchema(currentState);
                 return currentState;

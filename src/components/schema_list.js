@@ -8,7 +8,7 @@ function SchemaList(){
 
     return (
         <div>
-           <Typography variant="h5">Schema</Typography>
+           <Typography variant="h5">Schema:</Typography>
            {Object.keys(state.schema).map((tbl) => {return <SchemaItem table={tbl} columns={state.schema[tbl].columns}></SchemaItem>})}
         </div>
         
