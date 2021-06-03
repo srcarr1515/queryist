@@ -29,6 +29,9 @@ const DbProvider = ({ children }) => {
         switch (action.type) {
             case "QUERY":
             // Executing a query
+                console.log(action.params)
+                let test =  alasql(`${action.params}`)
+                console.log(test)
                 try {
                     let result = alasql(`${action.params}`);
                     console.log(result)
@@ -55,14 +58,17 @@ const DbProvider = ({ children }) => {
                     console.log(table)
                     if(table === 1){
                     // For some reason alasql has a hard time with new line characters, remove those!
-                    action.data.map((row) => {
-                        for(const key in row){
-                            if(row[key].includes('\n')){
-                                row[key] = row[key].replace(/\n/g, '... ')
+                    console.log('1 action data: ', action.data)
+
+                    action.data.forEach((row) => {
+                        columns.forEach((col) => {
+                            if(typeof row[col] === "string"){
+                                row[col] = row[col].replace(/\n/g, '... ')
                             }
-                        }
-                    })
-                    console.log(action.data)
+                        });
+                    });
+
+                    console.log('2 action data: ', action.data)
                     alasql(`INSERT INTO ${action.table} SELECT * FROM  ?`, [action.data]);
                     }
                     else if(table === 0){
