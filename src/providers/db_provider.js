@@ -2,6 +2,7 @@ import React, { createContext, useReducer} from "react";
 import * as alasql from 'alasql'
 
 const initialState = {
+    operation: null,
     schema: {},
     results: [{data: [], columns: []}]
 }
@@ -53,7 +54,6 @@ const DbProvider = ({ children }) => {
                 // Add a new table
                 if(!Object.keys(currentState.schema).includes(action.table)){
                     let columns = Object.keys(action.data[0])
-                    
                     let table = alasql(`CREATE TABLE IF NOT EXISTS ${action.table} (${columns.join(',')})`);
                     console.log(table)
                     if(table === 1){
@@ -91,6 +91,13 @@ const DbProvider = ({ children }) => {
             return currentState;
             case "DELETE":
             // Delete a table
+            try {
+                alasql(`DROP TABLE IF EXISTS ${action.table};`)
+            }
+            catch {
+                console.log('Already dropped.')
+            }
+            updateSchema(currentState);
             return currentState;
             default:
                 throw new Error("State Not Found")

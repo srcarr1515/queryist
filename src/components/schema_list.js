@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import Typography from '@material-ui/core/Typography';
 import { store } from '../providers/db_provider';
+import Typography from '@material-ui/core/Typography';
 import SchemaItem from './schema_item'
 
 function SchemaList(){
